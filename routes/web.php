@@ -41,4 +41,6 @@ Route::prefix('manage')
         Route::get('/dashboard', 'ManageController@dashboard')->name('manage.dashboard');
 
         Route::resource('/users', 'UserController');
+        Route::resource('/permissions', 'PermissionController', ['except' => 'destroy']);
+        Route::resource('/roles', 'RoleController', ['except' => 'destroy']);
 });

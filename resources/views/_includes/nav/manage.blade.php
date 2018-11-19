@@ -38,7 +38,12 @@
         </p>
         <ul class="menu-list">
             <li><a href="{{ route('users.index') }}">Users</a></li>
-            <li><a href="{{ route('users.index') }}">Role & Permissions</a></li>
+            <li><a href="{{ route('users.index') }}">Role & Permissions</a>
+                <ul class="submenu">
+                    <li><a href="{{route('roles.index')}}" class=" ">Roles</a></li>
+                    <li><a href="{{route('permissions.index')}}" class=" ">Permissions</a></li>
+                </ul>
+            </li>
             <li><a>Balance</a></li>
         </ul>
     </aside>
