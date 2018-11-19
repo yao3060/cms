@@ -21045,6 +21045,10 @@ a.is-muted:hover {
   left: 0;
 }
 
+.side-menu .submenu {
+  display: none;
+}
+
 .management-area {
   margin-left: 220px;
   padding: 20px;

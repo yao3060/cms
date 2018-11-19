@@ -6,6 +6,7 @@
  */
 
 require('./bootstrap');
+window.classList = require('classlist')
 
 window.Vue = require('vue');
 import Buefy from 'buefy'
@@ -35,3 +36,5 @@ Vue.use(Buefy)
 //     el: '#app',
 //     data: {}
 // });
+
+require('./manage')

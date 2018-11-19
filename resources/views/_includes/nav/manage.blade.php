@@ -22,8 +22,8 @@
         <ul class="menu-list">
             <li><a>Team Settings</a></li>
             <li>
-                <a class="is-active">Manage Your Team</a>
-                <ul>
+                <a class="has-submenu">Manage Your Team <span class="icon is-pulled-right"><i class="fas fa-angle-right"></i></span></a>
+                <ul class="submenu">
                     <li><a>Members</a></li>
                     <li><a>Plugins</a></li>
                     <li><a>Add a member</a></li>
@@ -38,7 +38,7 @@
         </p>
         <ul class="menu-list">
             <li><a href="{{ route('users.index') }}">Users</a></li>
-            <li><a href="{{ route('users.index') }}">Role & Permissions</a>
+            <li><a class="has-submenu" href="#">Role & Permissions <span class="icon is-pulled-right"><i class="fas fa-angle-right"></i></span></a>
                 <ul class="submenu">
                     <li><a href="{{route('roles.index')}}" class=" ">Roles</a></li>
                     <li><a href="{{route('permissions.index')}}" class=" ">Permissions</a></li>
