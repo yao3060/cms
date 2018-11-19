@@ -48,6 +48,26 @@
                     </div>
                 </div>
             </div>
+
+            <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                    <label for="roles" class="label is-pulled-left">{{ __('Roles:') }}</label>
+                </div>
+                <div class="field-body">
+                    <div class="field">
+                        <p class="control">
+                            {{ $user->roles->count() == 0 ? 'This user has not been assigned any roles yet.' : '' }}
+                            @foreach($user->roles as $role)
+                            <button class="button">{{ $role->display_name }}</button>
+                            @endforeach
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="column is-one-third">
+
         </div>
     </div>
     

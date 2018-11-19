@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Role;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Hash;
@@ -29,8 +30,8 @@ class UserController extends Controller
     public function create()
     {
         //
-
-        return view('manage.users.create');
+        $roles = Role::orderBy('name')->get();
+        return view('manage.users.create')->with('roles', $roles);
     }
 
     /**
@@ -60,6 +61,13 @@ class UserController extends Controller
         $user->password = Hash::make($password);
 
         if($user->save()){
+
+            if($request->roles && !empty($request->roles)){
+
+                $user->syncRoles(explode(',', $request->roles));
+
+            }
+
             return redirect()->route('users.show', $user->id);
         }else{
             Session::flash('danger', 'Sorry a problem occurred while creating this user.');
@@ -80,7 +88,8 @@ class UserController extends Controller
     {
         //
         $user = User::findOrFail($id);
-        return view('manage.users.show')->withUser($user);
+        return view('manage.users.show')
+            ->withUser($user);
     }
 
     /**
@@ -93,7 +102,10 @@ class UserController extends Controller
     {
         //
         $user = User::findOrFail($id);
-        return view('manage.users.edit')->withUser($user);
+        $roles = Role::orderby('name')->get();
+        return view('manage.users.edit')
+            ->withUser($user)
+            ->withRoles($roles);
     }
 
     /**
@@ -127,6 +139,13 @@ class UserController extends Controller
         }
 
         if($user->save()){
+
+            if($request->roles && !empty($request->roles)){
+
+                $user->syncRoles(explode(',', $request->roles));
+
+            }
+
             return redirect()->route('users.show', $user->id);
         }else{
             Session::flash('danger', 'Sorry a problem occurred while update this user.');

@@ -44,7 +44,6 @@
                     <li><a href="{{route('permissions.index')}}" class=" ">Permissions</a></li>
                 </ul>
             </li>
-            <li><a>Balance</a></li>
         </ul>
     </aside>
 </div>

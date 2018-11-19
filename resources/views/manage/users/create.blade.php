@@ -17,11 +17,11 @@
     </div>
 
     <hr class="m-t-10">
-    
-    <div class="columns">
-        <div class="column">
+
             <form action="{{ route('users.store') }}" method="POST">
                 @csrf
+    <div class="columns">
+        <div class="column">
 
                 <div class="field">
                     <label for="name" class="label">{{ __('Name') }}</label>
@@ -45,13 +45,38 @@
                     </p>
                 </div>
 
+
+
+        </div>
+
+        <div class="column">
+
+            <div class="field">
+                <label for="roles" class="label">Roles</label>
+                <p class="control">
+                    @foreach( $roles as $role )
+
+                    <div class="field">
+                        <b-checkbox v-model="rolesSelected" :native-value="{{ $role->id }}">
+                            {{ $role->display_name }}
+                        </b-checkbox>
+                    </div>
+
+                    @endforeach
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+                <hr>
+
                 <div class="field">
                     <button class="button is-primary">{{ __('Submit') }}</button>
+                    <input v-if="rolesSelected != ''" type="text" name="roles" :value="rolesSelected">
                 </div>
 
             </form>
-        </div>
-    </div>
 
 @endsection
 
@@ -61,7 +86,8 @@
     var app = new Vue({
         el: "#app",
         data: {
-            auto_password: true
+            auto_password: true,
+            rolesSelected: []
         }
     });
 

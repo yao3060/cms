@@ -40,6 +40,18 @@
                 </div>
 
                 <div class="field">
+                    <label for="roles" class="label">Roles</label>
+
+                    <p class="control">
+                        @foreach($roles as $role)
+                        <div class="field">
+                            <b-checkbox v-model="rolesSelected" :native-value="{{ $role->id }}">{{ $role->display_name }}</b-checkbox>
+                        </div>
+                        @endforeach
+                    </p>
+                </div>
+
+                <div class="field">
                     <label for="password" class="label">{{ __('Password') }}</label>
 
                     <section>
@@ -57,12 +69,11 @@
                         </div>
                     </section>
 
-
-
                 </div>
 
                 <div class="field">
                     <button class="button is-success">{{ __('Submit') }}</button>
+                    <input v-if="rolesSelected != ''" type="hidden" name="roles" :value="rolesSelected">
                 </div>
 
 
@@ -79,7 +90,8 @@
     var app = new Vue({
         el: "#app",
         data: {
-            password_option: 'keep'
+            password_option: 'keep',
+            rolesSelected: {!! $user->roles->pluck('id') !!}
         }
     });
 
