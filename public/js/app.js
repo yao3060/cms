@@ -55448,13 +55448,12 @@ function admin_side_menu() {
             var _this = this;
             var icon = _this.querySelector('.fas');
             var iconClassList = classList(icon);
-            //console.log(iconClassList);
 
-            _this.classList.toggle('is-active');
+            _this.classList.toggle('is-hovered');
 
             var submenu = this.nextElementSibling;
 
-            if (_this.classList.contains('is-active')) {
+            if (_this.classList.contains('is-hovered')) {
                 submenu.style.display = 'block';
                 iconClassList.replace('fa-angle-right', 'fa-angle-down');
             } else {

@@ -37,7 +37,7 @@
             Transactions
         </p>
         <ul class="menu-list">
-            <li><a href="{{ route('users.index') }}">Users</a></li>
+            <li><a class="{{ Nav::isResource('users', '', 'is-active') }}" href="{{ route('users.index') }}">Users</a></li>
             <li><a class="has-submenu" href="#">Role & Permissions <span class="icon is-pulled-right"><i class="fas fa-angle-right"></i></span></a>
                 <ul class="submenu">
                     <li><a href="{{route('roles.index')}}" class=" ">Roles</a></li>
