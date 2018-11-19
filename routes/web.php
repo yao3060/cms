@@ -33,3 +33,12 @@ Route::prefix('admin')->group(function (){
 
     Route::get('/', 'AdminController@index')->name('admin.dashboard');
 });
+
+Route::prefix('manage')
+    ->middleware('role:superadministrator|administrator|editor')
+    ->group(function (){
+        Route::get('/', 'ManageController@index')->name('manage.dashboard');
+        Route::get('/dashboard', 'ManageController@dashboard')->name('manage.dashboard');
+
+        Route::resource('/users', 'UserController');
+});

@@ -21035,3 +21035,18 @@ a.is-muted:hover {
   text-overflow: ellipsis;
 }
 
+.side-menu {
+  position: fixed;
+  height: 100vh;
+  width: 220px;
+  background: white;
+  overflow-y: auto;
+  border-right: 1px solid #eee;
+  left: 0;
+}
+
+.management-area {
+  margin-left: 220px;
+  padding: 20px;
+}
+
