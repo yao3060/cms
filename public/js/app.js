@@ -55748,7 +55748,7 @@ exports = module.exports = __webpack_require__(42)(false);
 
 
 // module
-exports.push([module.i, "\n.wrapper[data-v-a40bb44c] {\n        display: inline;\n}\n.slug-edit[data-v-a40bb44c] {\n    max-width:200px;\n}\n.buttons-wrapper[data-v-a40bb44c] {\n        margin-left:10px;\n}\n.slug[data-v-a40bb44c] {\n        background-color: yellow;\n}\n\n", ""]);
+exports.push([module.i, "\n.wrapper[data-v-a40bb44c] {\n    display: inline;\n}\n.slug-edit[data-v-a40bb44c] {\n    max-width:200px;\n}\n.buttons-wrapper[data-v-a40bb44c] {\n    margin-left:10px;\n}\n.slug[data-v-a40bb44c] {\n    background-color: yellow;\n}\n\n", ""]);
 
 // exports
 
@@ -56170,6 +56170,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -56189,10 +56192,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         return {
-            slug: this.convertTitle(),
+            slug: this.setSlug(this.title),
             isEditing: false,
             customSlug: '',
-            wasEdited: false
+            wasEdited: false,
+            api_token: this.$root.api_token
         };
     },
     methods: {
@@ -56201,31 +56205,58 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         editSlug: function editSlug() {
             this.customSlug = this.slug;
+            this.$emit('edit', this.slug);
             this.isEditing = true;
         },
         saveSlug: function saveSlug() {
 
-            this.slug = Slug(this.customSlug);
-            this.isEditing = false;
             if (this.customSlug !== this.slug) {
                 this.wasEdited = true;
             }
+            this.setSlug(this.customSlug);
+            this.isEditing = false;
         },
         resetSlug: function resetSlug() {
-            this.slug = this.convertTitle();
+            this.setSlug(this.title);
             this.wasEdited = false;
             this.isEditing = false;
+        },
+        setSlug: function setSlug(newVal) {
+            var count = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+            // Slugify the newVal
+            var slug = Slug(newVal + (count > 0 ? '-' + count : ''));
+            var _this = this;
+
+            if (this.api_token && slug) {
+
+                axios.get('/api/posts/unique', {
+                    params: {
+                        api_token: _this.api_token,
+                        slug: slug
+                    }
+                }).then(function (response) {
+
+                    // see if it is unique and emit event
+                    if (response.data) {
+                        _this.slug = slug;
+                        _this.$emit('slug-changed', slug);
+                    } else {
+                        // else customize the slug to make it unique and test again
+                        _this.setSlug(newVal, count + 1);
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            }
         }
     },
     watch: {
         title: _.debounce(function () {
             if (this.wasEdited == false) {
-                this.slug = this.convertTitle();
+                this.slug = this.setSlug(this.title);
             }
-        }, 500),
-        slug: function slug(val) {
-            this.$emit('slug-changed', val);
-        }
+        }, 500)
     }
 });
 

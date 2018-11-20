@@ -8,7 +8,10 @@
             <span class="root-url">{{url}}</span>
             <span class="subdirectory-url">/{{subdirectory}}/</span>
             <span class="slug" v-show="slug && !isEditing" >{{slug}}</span>
-            <input type="text" name="slug-edit" class="slug-edit input is-small" v-show="isEditing" v-model="customSlug">
+            <input type="text" name="slug-edit"
+                   class="slug-edit input is-small"
+                   v-show="isEditing"
+                   v-model="customSlug">
         </div>
 
         <div class="wrapper buttons buttons-wrapper">
@@ -25,9 +28,9 @@
     .wrapper {
         display: inline;
     }
-.slug-edit {
-    max-width:200px;
-}
+    .slug-edit {
+        max-width:200px;
+    }
 
     .buttons-wrapper {
         margin-left:10px;
@@ -58,10 +61,11 @@
         },
         data: function () {
             return {
-                slug: this.convertTitle(),
+                slug: this.setSlug(this.title),
                 isEditing: false,
                 customSlug: '',
-                wasEdited: false
+                wasEdited: false,
+                api_token: this.$root.api_token
             };
         },
         methods: {
@@ -70,31 +74,59 @@
             },
             editSlug: function(){
                 this.customSlug = this.slug;
+                this.$emit('edit', this.slug);
                 this.isEditing = true;
             },
             saveSlug: function(){
 
-                this.slug = Slug(this.customSlug);
-                this.isEditing = false;
                 if( this.customSlug !== this.slug ){
                     this.wasEdited = true;
                 }
+                this.setSlug(this.customSlug);
+                this.isEditing = false;
             },
             resetSlug: function(){
-                this.slug = this.convertTitle();
+                this.setSlug(this.title);
                 this.wasEdited = false;
                 this.isEditing = false;
+            },
+            setSlug: function (newVal, count = 0) {
+                // Slugify the newVal
+                let slug = Slug(newVal + (count > 0 ? '-' + count : '' ));
+                let _this = this;
+
+                if (this.api_token && slug){
+
+                    axios.get('/api/posts/unique', {
+                        params: {
+                            api_token: _this.api_token,
+                            slug: slug
+                        }
+                    }).then(function (response) {
+
+                        // see if it is unique and emit event
+                        if (response.data){
+                            _this.slug = slug;
+                            _this.$emit('slug-changed', slug);
+                        } else {
+                            // else customize the slug to make it unique and test again
+                            _this.setSlug(newVal, count+1);
+
+                        }
+
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+
+                }
             }
         },
         watch: {
             title: _.debounce(function () {
                 if(this.wasEdited == false) {
-                    this.slug = this.convertTitle();
+                    this.slug = this.setSlug(this.title);
                 }
-            }, 500),
-            slug: function (val) {
-                this.$emit('slug-changed', val);
-            }
+            }, 500)
         }
     }
 

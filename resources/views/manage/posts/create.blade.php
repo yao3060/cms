@@ -23,12 +23,16 @@
                     <b-input name="title" placeholder="Post Title" v-model="title"></b-input>
                 </b-field>
 
-                <slug-widget url="{{ url('/') }}" subdirectory="blog" :title="title" @slug-changed="updateSlug"></slug-widget>
+                <slug-widget url="{{ url('/') }}"
+                             subdirectory="blog"
+                             :title="title"
+                             @slug-changed="updateSlug"></slug-widget>
+                <input type="hidden" v-model="slug" name="slug" />
 
                 <hr class="m-t-20">
 
                 <b-field label="Content">
-                    <b-input type="textarea" name="content" placeholder="Content"></b-input>
+                    <b-input type="textarea" name="post_content" placeholder="Content"></b-input>
                 </b-field>
 
 
@@ -81,7 +85,8 @@
         el: "#app",
         data: {
             title: '',
-            slug: ''
+            slug: '',
+            api_token: '{{Auth::user()->api_token}}'
         },
         methods:{
             updateSlug: function (val) {

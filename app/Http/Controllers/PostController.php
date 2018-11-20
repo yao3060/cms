@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:superadministrator|administrator|editor');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -49,6 +54,19 @@ class PostController extends Controller
             'slug' => 'required|max:100|unique:posts',
             'content' => 'sometimes'
         ]);
+
+        $post = new Post();
+        $post->title = $request->title;
+        $post->slug = $request->slug;
+        //$post->excerpt = '';
+        $post->content = $request->post_content;
+        $post->author_id = $request->author_id;
+        $post->published_at = date('Y-m-d H:i:s');
+
+        $post->save();
+
+        return redirect()->route('posts.index');
+
     }
 
     /**
@@ -94,5 +112,11 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+
+    }
+
+    public function apiCheckSlug(Request $request){
+
+        return json_encode(!Post::where('slug', '=', $request->slug)->exists());
     }
 }
