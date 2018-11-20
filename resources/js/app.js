@@ -7,6 +7,8 @@
 
 require('./bootstrap');
 window.classList = require('classlist')
+window.Slug = require('slug')
+Slug.defaults.mode = "rfc3986"
 
 window.Vue = require('vue');
 import Buefy from 'buefy'
@@ -22,6 +24,7 @@ Vue.use(Buefy)
  */
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('slug-widget', require('./components/slugWidget.vue'));
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))

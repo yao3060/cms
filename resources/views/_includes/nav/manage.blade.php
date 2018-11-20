@@ -17,10 +17,10 @@
             <li><a>Customers</a></li>
         </ul>
         <p class="menu-label">
-            Administration
+            Content
         </p>
         <ul class="menu-list">
-            <li><a>Team Settings</a></li>
+            <li><a href="{{ route('posts.index') }}" class="{{ Nav::isResource('posts', '', 'is-active') }}">Posts</a></li>
             <li>
                 <a class="has-submenu">Manage Your Team <span class="icon is-pulled-right"><i class="fas fa-angle-right"></i></span></a>
                 <ul class="submenu">

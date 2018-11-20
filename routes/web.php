@@ -43,4 +43,6 @@ Route::prefix('manage')
         Route::resource('/users', 'UserController');
         Route::resource('/permissions', 'PermissionController', ['except' => 'destroy']);
         Route::resource('/roles', 'RoleController');
+
+        Route::resource('/posts', 'PostController');
 });
