@@ -45,4 +45,5 @@ Route::prefix('manage')
         Route::resource('/roles', 'RoleController');
 
         Route::resource('/posts', 'PostController');
+        Route::resource('/terms', 'TermController');
 });

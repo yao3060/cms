@@ -15,9 +15,10 @@
             <h1 class="title">Posts</h1>
         </div>
         <div class="column">
-            <spam class="is-pulled-right">
+            <span class="is-pulled-right">
+                <a href="#" @click="showSlug" class="button">Show Slug</a>
                 <a href="{{ route('posts.create') }}" class="button">Add New</a>
-            </spam>
+            </span>
         </div>
     </div>
 
@@ -32,23 +33,35 @@
                     <th>ID</th>
                     <th>Title</th>
                     <th>Author</th>
+                    <th>Categories</th>
+                    <th>Tags</th>
                     <th>Publish At</th>
-                    <th>Created At</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($posts as $post)
-                <tr>
+                <tr id="post_{{$post->id}}">
                     <td>{{ $post->id }}</td>
                     <td>
-                        {{ $post->title }}
-                        <em>( {{ $post->slug }} )</em>
+                        {{ $post->title }}<br>
+                        <small class="is-light is-small" v-show="show_slug">( {{ $post->slug }} )</small>
                     </td>
                     <td>{{ $post->author_id }}</td>
+                    <td>
+                        @foreach($post->categories as $category)
+                            <a class="button is-text is-small" href="{{ route('terms.show', $category->id) }}">{{ $category->name }}</a>
+                        @endforeach
+                    </td>
+                    <td>
+                        @foreach($post->tags as $tag)
+                            <a class="button is-text is-small" href="{{ route('terms.show', $tag->id) }}">{{ $tag->name }}</a>
+                        @endforeach
+                    </td>
                     <td>{{ $post->published_at }}</td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <a href="{{ route('posts.edit', $post->id) }}" class="button is-small">Edit</a>
+                    </td>
                 </tr>
                     @endforeach
                 </tbody>
@@ -57,4 +70,25 @@
         </div>
     </div>
 
+@endsection
+
+@section('scripts')
+<script>
+    var app = new Vue({
+        el: "#app",
+        data: {
+            show_slug: false
+        },
+        methods:{
+            showSlug: function () {
+                if(this.show_slug){
+                    this.show_slug = false
+                } else {
+                    this.show_slug = true;
+                }
+            }
+        }
+
+    });
+</script>
 @endsection

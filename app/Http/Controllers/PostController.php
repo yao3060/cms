@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Term;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\PostCollection;
 
 class PostController extends Controller
 {
@@ -23,6 +25,7 @@ class PostController extends Controller
     {
         //
         $posts = Post::orderBy('id')->get();
+        //return \App\Http\Resources\Post::collection($posts);
         return view('manage.posts.index')->with('posts', $posts);
     }
 
@@ -35,8 +38,11 @@ class PostController extends Controller
     {
         //
         $user = Auth::user();
-//        dd($user);
+
+        $categories = Term::where('taxonomy', '=', 'category')->orderBy('slug')->get();
+
         return view('manage.posts.create')
+            ->with('categories', $categories)
             ->with('user', $user);
     }
 
@@ -62,9 +68,16 @@ class PostController extends Controller
         $post->content = $request->post_content;
         $post->author_id = $request->author_id;
         $post->published_at = date('Y-m-d H:i:s');
+        $terms = $request->terms;
 
-        $post->save();
+        if ($post->save()){
 
+            if(!empty($terms)){
+                $terms = explode(',', $terms);
+                $post->terms()->sync($terms, true);
+            }
+
+        }
         return redirect()->route('posts.index');
 
     }
@@ -89,6 +102,16 @@ class PostController extends Controller
     public function edit($id)
     {
         //
+        $user = Auth::user();
+        $post = Post::findOrFail($id);
+        $categories = Term::where('taxonomy', '=', 'category')->orderBy('slug')->get();
+        $tags = Term::where('taxonomy', '=', 'tag')->orderBy('slug')->get();
+
+        return view('manage.posts.edit')
+            ->with('categories', $categories)
+            ->with('tags', $tags)
+            ->with('post', $post)
+            ->with('user', $user);
     }
 
     /**
@@ -100,7 +123,32 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $post = Post::findOrFail($id);
+
+        $this->validate($request, [
+            'title' => 'required|max:255|min:3',
+            'slug' => 'required|max:100|unique:posts,id,'.$id,
+            'content' => 'sometimes'
+        ]);
+
+        $post->title = $request->title;
+        $post->slug = $request->slug;
+        //$post->excerpt = '';
+        $post->content = $request->post_content;
+        $post->author_id = $request->author_id;
+        $terms = $request->terms;
+
+        if ($post->save()){
+
+            if(!empty($terms)){
+                $terms = explode(',', $terms);
+                $post->terms()->sync($terms, true);
+            }
+
+        }
+
+        return redirect()->route('posts.edit', $post->id);
     }
 
     /**

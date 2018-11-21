@@ -14,8 +14,10 @@
     <h1 class="title">Add new post</h1>
     <hr>
 
-    <form action="{{ route('posts.store') }}" method="POST">
+    <form action="{{ route('posts.update', $post->id) }}" method="POST">
         @csrf
+        {{ method_field('PUT') }}
+
         <div class="columns">
             <div class="column is-three-quarters">
 
@@ -32,11 +34,12 @@
                 <hr class="m-t-20">
 
                 <b-field label="Content">
-                    <b-input type="textarea" name="post_content" placeholder="Content"></b-input>
+                    <b-input type="textarea" name="post_content" value="{{ $post->content }}">
+                    </b-input>
                 </b-field>
 
+            </div>
 
-        </div>
             <div class="column">
 
                 <div class="card">
@@ -76,7 +79,7 @@
                 </div>
 
 
-                <div class="card">
+                <div class="card m-t-20">
                     <header class="card-header">
                         <p class="card-header-title">Category</p>
                     </header>
@@ -93,7 +96,28 @@
 
                             @endforeach
 
-                                <input type="hidden" name="categories" class="input" :value="categories">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card m-t-20">
+                    <header class="card-header">
+                        <p class="card-header-title">Tags</p>
+                    </header>
+                    <div class="card-content">
+                        <div class="content">
+
+                            @foreach($tags as $tag)
+
+                                <div class="field">
+                                    <b-checkbox native-value="{{ $tag->id }}" v-model="tags">
+                                        {{$tag->name}}
+                                    </b-checkbox>
+                                </div>
+
+                            @endforeach
+
+
 
                         </div>
                     </div>
@@ -101,6 +125,8 @@
 
             </div>
         </div>
+
+        <input type="hidden" name="terms" class="input" :value="terms">
     </form>
 
 @endsection
@@ -110,14 +136,22 @@
     var app = new Vue({
         el: "#app",
         data: {
-            title: '',
-            slug: '',
-            categories:[],
+            title: '{{ $post->title }}',
+            slug: '{{ $post->slug }}',
+            post_content: '',
+            categories:{{ $post->categories->pluck('id') }},
+            tags: {{ $post->tags->pluck('id') }},
             api_token: '{{Auth::user()->api_token}}'
         },
         methods:{
             updateSlug: function (val) {
                 this.slug = val
+            }
+        },
+        computed: {
+            terms: function () {
+                console.log(this.categories == "");
+                return this.categories + (this.categories == "" || this.tags == "" ? "" : ",") + this.tags
             }
         }
     });

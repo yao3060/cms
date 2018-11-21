@@ -68,6 +68,11 @@
                 api_token: this.$root.api_token
             };
         },
+        created:function () {
+            if(this.$root.slug !== ''){
+                this.slug = this.$root.slug;
+            }
+        },
         methods: {
             convertTitle: function(){
                 return Slug(this.title)
@@ -91,6 +96,7 @@
                 this.isEditing = false;
             },
             setSlug: function (newVal, count = 0) {
+
                 // Slugify the newVal
                 let slug = Slug(newVal + (count > 0 ? '-' + count : '' ));
                 let _this = this;
