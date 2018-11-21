@@ -6,6 +6,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script> window.Laravel = {'csrfToken':'{{csrf_token()}}'}</script>
 
     <title>Dashboard {{ config('app.name', 'Laravel') }}</title>
 
@@ -21,6 +22,7 @@
         @include('_includes.nav.manage')
 
         <div class="management-area">
+            @include('partials._messages')
             @yield('content')
         </div>
     </div>

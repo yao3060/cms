@@ -16,6 +16,7 @@
         </div>
         <div class="column">
             <span class="is-pulled-right">
+                <a href="{{ route('terms.index') }}" class="button">Terms</a>
                 <a href="#" @click="showSlug" class="button">Show Slug</a>
                 <a href="{{ route('posts.create') }}" class="button">Add New</a>
             </span>

@@ -78,6 +78,17 @@
 
                 </div>
 
+                <div class="card m-t-20">
+                    <header class="card-header">
+                        <p class="card-header-title">Feature Image</p>
+                    </header>
+                    <div class="card-content">
+                        <div class="content">
+
+                        <image-upload image-url="https://fakeimg.pl/300x300/?text=World&font=lobster"></image-upload>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card m-t-20">
                     <header class="card-header">

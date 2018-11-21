@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Term;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class TermController extends Controller
 {
@@ -14,6 +16,10 @@ class TermController extends Controller
     public function index()
     {
         //
+        $terms = Term::all();
+
+        return view('manage.terms.index')
+            ->with('terms', $terms);
     }
 
     /**
@@ -80,5 +86,11 @@ class TermController extends Controller
     public function destroy($id)
     {
         //
+        $term = Term::findOrFail($id);
+        $term->posts()->detach();
+        $term->delete();
+
+        Session::flash('success', "Term($term->taxonomy) was deleted successfully");
+        return redirect()->route('terms.index');
     }
 }

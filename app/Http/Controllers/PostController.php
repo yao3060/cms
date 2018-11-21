@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\PostCollection;
+use Illuminate\Support\Facades\Session;
 
 class PostController extends Controller
 {
@@ -124,6 +125,7 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
 
+        dd($request);
         $post = Post::findOrFail($id);
 
         $this->validate($request, [
@@ -147,6 +149,8 @@ class PostController extends Controller
             }
 
         }
+
+        Session::flash('success', "Post was updated successfully.");
 
         return redirect()->route('posts.edit', $post->id);
     }

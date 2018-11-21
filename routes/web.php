@@ -17,6 +17,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/mail-preview', function () {
+    return new App\Mail\Contact();
+});
+
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/user/logout', 'Auth\LoginController@userLogout')->name('user.logout');
 
@@ -45,5 +49,7 @@ Route::prefix('manage')
         Route::resource('/roles', 'RoleController');
 
         Route::resource('/posts', 'PostController');
+        Route::post('/upload/image', 'UploadController@image')->name('upload.image');
+
         Route::resource('/terms', 'TermController');
 });
