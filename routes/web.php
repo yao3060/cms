@@ -22,6 +22,11 @@ Route::get('/mail-preview', function () {
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/blog', 'BlogController@index')->name('blog.index');
+Route::get('/blog/{id}', 'BlogController@show')->name('blog.show');
+
+Route::post('/blog/{id}/answer', 'AnswerController@store')->name('blog.answer.store');
+
 Route::get('/user/logout', 'Auth\LoginController@userLogout')->name('user.logout');
 
 Route::prefix('admin')->group(function (){

@@ -33,6 +33,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Title</th>
+                    <th>Featured Image</th>
                     <th>Author</th>
                     <th>Categories</th>
                     <th>Tags</th>
@@ -47,6 +48,11 @@
                     <td>
                         {{ $post->title }}<br>
                         <small class="is-light is-small" v-show="show_slug">( {{ $post->slug }} )</small>
+                    </td>
+                    <td>
+                        @if($post->featured_image)
+                        <img src="{{ $post->featured_image }}" alt="" style="border: 1px solid #ccc; width: 64px; height: 64px; display: block;">
+                        @endif
                     </td>
                     <td>{{ $post->author_id }}</td>
                     <td>
@@ -68,6 +74,7 @@
                 </tbody>
             </table>
 
+            {{ $posts->links() }}
         </div>
     </div>
 

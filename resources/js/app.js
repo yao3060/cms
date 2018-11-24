@@ -26,6 +26,8 @@ Vue.use(Buefy)
 // Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('slug-widget', require('./components/slugWidget.vue'));
 Vue.component('image-upload', require('./components/imageUploadComponent.vue'));
+Vue.component('comments-widget', require('./components/Comments.vue'));
+
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))

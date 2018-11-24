@@ -24,9 +24,7 @@
         <div class="navbar-start">
             <a class="navbar-item" href="/">{{ __('Home') }}</a>
 
-            <a class="navbar-item">
-                Documentation
-            </a>
+            <a class="navbar-item is-active" href="{{ route('blog.index') }}">{{ __('Blog') }}</a>
 
             <div class="navbar-item has-dropdown is-hoverable">
                 <a class="navbar-link">

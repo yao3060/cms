@@ -18,7 +18,7 @@
 
         @include('_includes.nav.main')
 
-        <main class="py-4">
+        <main id="main" class="container m-t-20">
             @yield('content')
         </main>
     </div>

@@ -21,9 +21,11 @@
 
         @include('_includes.nav.manage')
 
-        <div class="management-area">
-            @include('partials._messages')
-            @yield('content')
+        <div class="management-area ">
+            <div class="">
+                @include('partials._messages')
+                @yield('content')
+            </div>
         </div>
     </div>
 

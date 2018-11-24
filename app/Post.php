@@ -8,6 +8,34 @@ use Illuminate\Support\Facades\DB;
 class Post extends Model
 {
     //
+    protected $fillable = ['title', 'slug', 'excerpt', 'content', 'author_id'];
+
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'author_id', 'id');
+    }
+
+    public function answers()
+    {
+        return $this->hasMany('App\Answer');
+    }
+
+    public function comments()
+    {
+        return $this->morphMany('App\Comment', 'commentable');
+    }
+
+    public function meta($meta_key = ''){
+
+        if( $meta_key == '' ) return $this->metas();
+
+        return $this->hasMany('App\Postmeta')->where('meta_key', $meta_key);
+    }
+
+    public function metas()
+    {
+        return $this->hasMany('App\Postmeta');
+    }
 
     public function categories()
     {

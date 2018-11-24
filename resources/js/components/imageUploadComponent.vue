@@ -14,8 +14,8 @@
                    img-format="png"></my-upload>
         <img :src="imgDataUrl" v-if="imgDataUrl">
 
-        <input type="hidden" class="input is-fullwidth" name="image_url" id="image_url" :value="imageUrl">
-        <a class="button is-small is-fullwidth" @click="toggleShow">set image</a>
+        <input type="hidden" class="input is-fullwidth" name="featured_image" id="image_url" :value="imageUrl">
+        <a class="button is-small is-fullwidth m-t-10" @click="toggleShow">set image</a>
     </div>
 </template>
 

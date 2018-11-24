@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad3ea411375fb541e6f723fb32d79aad",
+    "content-hash": "e73ca6dbd99947b0630a687650d05912",
     "packages": [
         {
             "name": "devmarketer/easynav",
@@ -2585,6 +2585,37 @@
                 "environment"
             ],
             "time": "2018-07-29T20:33:41+00:00"
+        },
+        {
+            "name": "xmeltrut/autop",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xmeltrut/autop.git",
+                "reference": "b8a32d28f3ee2247a0969880d66903935f86d71b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xmeltrut/autop/zipball/b8a32d28f3ee2247a0969880d66903935f86d71b",
+                "reference": "b8a32d28f3ee2247a0969880d66903935f86d71b",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/Autop.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Chris Worfolk",
+                    "email": "chris@worfolk.co.uk",
+                    "homepage": "http://www.worfolk.co.uk"
+                }
+            ],
+            "description": "WordPress' excellent wpautop as a standalone library",
+            "time": "2015-06-07T15:12:09+00:00"
         }
     ],
     "packages-dev": [

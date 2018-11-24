@@ -22,5 +22,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware('auth:api')->group( function () {
 
     Route::get('/posts/unique', 'PostController@apiCheckSlug')->name('api.posts.unique');
+    Route::post('/comments/store', 'CommentController@store')->name('api.comments.store');
+
+});
+
+Route::middleware('api')->group( function () {
+
+    Route::get('/posts', 'Api\PostController@index')->name('api.posts.index');
 
 });

@@ -34,9 +34,13 @@
                 <hr class="m-t-20">
 
                 <b-field label="Content">
-                    <b-input type="textarea" name="post_content" value="{{ $post->content }}">
-                    </b-input>
+                    <b-input type="textarea" name="excerpt" value="{{$post->excerpt}}"></b-input>
                 </b-field>
+
+                <div class="control">
+                    <!-- 编辑器容器 -->
+                    <script id="container" name="post_content" type="text/plain">{!!  $post->content  !!}</script>
+                </div>
 
             </div>
 
@@ -84,8 +88,7 @@
                     </header>
                     <div class="card-content">
                         <div class="content">
-
-                        <image-upload image-url="https://fakeimg.pl/300x300/?text=World&font=lobster"></image-upload>
+                            <image-upload image-url="{{ $post->featured_image }}"></image-upload>
                         </div>
                     </div>
                 </div>
@@ -142,7 +145,29 @@
 
 @endsection
 
+@include('vendor.ueditor.assets')
 @section('scripts')
+
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+        var ue = UE.getEditor('container', {
+            toolbars: [[
+                'fullscreen', 'source', '|', 'undo', 'redo', '|',
+                'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+                'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+                'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+                'directionalityltr', 'directionalityrtl', 'indent', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+                'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+                'simpleupload', 'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment', 'map', 'gmap', 'insertframe', 'insertcode', 'webapp', 'pagebreak', 'template', 'background', '|',
+                'preview'
+            ]]
+        });
+        ue.ready(function() {
+            ue.execCommand('serverparam', '_token', Laravel.csrfToken); // 设置 CSRF token.
+        });
+    </script>
+
 <script>
     var app = new Vue({
         el: "#app",

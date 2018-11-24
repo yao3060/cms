@@ -20,8 +20,8 @@ class CreatePostsTable extends Migration
             $table->string('excerpt');
             $table->longText('content');
             $table->integer('author_id')->unsigned();
-            $table->integer('status')->unsigned()->default(1);
-            $table->integer('type')->unsigned()->default(1);
+            $table->string('status', 20)->default('publish');
+            $table->string('type', 50)->default('post');
             $table->bigInteger('comment_count')->unsigned();
             $table->dateTime('published_at');
             $table->timestamps();

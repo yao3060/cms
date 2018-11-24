@@ -11,7 +11,8 @@
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
         "overtrue/laravel-ueditor": "~1.0",
-        "santigarcor/laratrust": "5.0.*"
+        "santigarcor/laratrust": "5.0.*",
+        "xmeltrut/autop": "^1.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Postmeta;
 use App\Term;
 use App\User;
 use Illuminate\Http\Request;
@@ -25,8 +26,19 @@ class PostController extends Controller
     public function index()
     {
         //
-        $posts = Post::orderBy('id')->get();
-        //return \App\Http\Resources\Post::collection($posts);
+        $posts = Post::orderBy('id', 'desc')->paginate(10);
+
+        foreach ($posts as $post){
+
+            $featuredImageObject = $post->meta('featured_image')->first();
+            if ( $featuredImageObject ){
+                $post->featured_image = $featuredImageObject->meta_value;
+            } else {
+                $post->featured_image = '';
+            }
+
+        }
+
         return view('manage.posts.index')->with('posts', $posts);
     }
 
@@ -108,6 +120,15 @@ class PostController extends Controller
         $categories = Term::where('taxonomy', '=', 'category')->orderBy('slug')->get();
         $tags = Term::where('taxonomy', '=', 'tag')->orderBy('slug')->get();
 
+        $featuredImageObject = $post->meta('featured_image')->first();
+        if ( $featuredImageObject ){
+            $post->featured_image = $featuredImageObject->meta_value;
+        } else {
+            $post->featured_image = '';
+        }
+        //$meta = $post->metas()->where('meta_key',  'key2')->first();
+
+
         return view('manage.posts.edit')
             ->with('categories', $categories)
             ->with('tags', $tags)
@@ -125,7 +146,7 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
 
-        dd($request);
+        //dd($request);
         $post = Post::findOrFail($id);
 
         $this->validate($request, [
@@ -136,12 +157,14 @@ class PostController extends Controller
 
         $post->title = $request->title;
         $post->slug = $request->slug;
-        //$post->excerpt = '';
+        $post->excerpt = str_limit($request->excerpt, 150);
         $post->content = $request->post_content;
         $post->author_id = $request->author_id;
         $terms = $request->terms;
 
         if ($post->save()){
+
+            $this->updateMeta($post->id, 'featured_image', $request->featured_image);
 
             if(!empty($terms)){
                 $terms = explode(',', $terms);
@@ -170,5 +193,40 @@ class PostController extends Controller
     public function apiCheckSlug(Request $request){
 
         return json_encode(!Post::where('slug', '=', $request->slug)->exists());
+    }
+
+    public function updateMeta($post_id, $meta_key, $meta_value){
+
+        $postmeta = Postmeta::where([
+            ['post_id', '=', $post_id],
+            ['meta_key', '=', $meta_key],
+        ])->first();
+
+        if( $postmeta ){
+            $postmeta->meta_value = $meta_value;
+            $postmeta->save();
+        } else {
+
+            $this->addMeta($post_id, $meta_key, $meta_value);
+        }
+
+    }
+
+    public function addMeta($post_id, $meta_key, $meta_value)
+    {
+        if( is_integer($post_id) && !empty($meta_key) ){
+
+            $postmeta = new Postmeta();
+
+            $postmeta->post_id = $post_id;
+            $postmeta->meta_key = $meta_key;
+            $postmeta->meta_value = $meta_value;
+
+            $postmeta->save();
+
+        } else {
+
+            Log::warning("Miss args when add meta [post_id:$post_id, meta_key:$meta_key, meta_value:$meta_value");
+        }
     }
 }
