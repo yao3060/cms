@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderShipped;
 use App\Post;
 use App\User;
 use Carbon\Carbon;
@@ -66,10 +67,9 @@ class BlogController extends Controller
      */
     public function show($id)
     {
-        //
-        //$post = $this->blogRepository->byID($id);
 
-        $post = Post::findOrFail($id)->with(['user', 'answers'])->first();
+        $post = Post::findOrFail($id);
+        event(new OrderShipped($post));
 
         $featuredImageObject = $post->meta('featured_image')->first();
         if ( $featuredImageObject ){
@@ -83,20 +83,22 @@ class BlogController extends Controller
         $post->author_name = $post->user->name;
 
         $view_count = $post->meta('view_count')->first();
+
+        $post_view_count =1;
         //dd($view_count);
-        if($view_count){
-
-            $view_count->update(['meta_value' => $view_count->meta_value+1]);
-            $post_view_count = $view_count->meta_value;
-
-        }else{
-            $post->metas()->insert([
-                'post_id' => $post->id,
-                'meta_key' => 'view_count',
-                'meta_value' => 1
-            ]);
-            $post_view_count = 1;
-        }
+//        if($view_count){
+//
+//            $view_count->update(['meta_value' => $view_count->meta_value+1]);
+//            $post_view_count = $view_count->meta_value;
+//
+//        }else{
+//            $post->metas()->insert([
+//                'post_id' => $post->id,
+//                'meta_key' => 'view_count',
+//                'meta_value' => 1
+//            ]);
+//            $post_view_count = 1;
+//        }
 
         return view('blog.show')
             ->with('post', $post)

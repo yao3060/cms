@@ -23,3 +23,5 @@
     <p class="text-danger">You are Logged out as a ADMIN</p>
 
 @endif
+
+<a href="{{ route('sendEmail') }}" class="button is-primary is-block">Send an Email</a>

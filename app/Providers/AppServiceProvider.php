@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,7 +20,12 @@ class AppServiceProvider extends ServiceProvider
         //
         Schema::defaultStringLength(191);
         Paginator::defaultView('pagination::default');
-        Resource::withoutWrapping();
+        //Resource::withoutWrapping();
+
+        Relation::morphMap([
+            'posts' => 'App\Post',
+            'answers' => 'App\Answer',
+        ]);
     }
 
     /**

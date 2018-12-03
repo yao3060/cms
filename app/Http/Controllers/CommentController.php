@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use App\User;
 use App\Comment;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -13,19 +15,28 @@ class CommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-    }
+        $commentable_type = $request->type == 'post' ? 'post' : 'answer';
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $comments = Comment::where([
+            ['commentable_id', $request->post_id],
+            ['commentable_type', $commentable_type]
+        ])->orderBy('id', 'desc')->get();
+
+        foreach($comments as $key=>$comment) {
+
+            $author = User::find($comment->user_id);
+
+            $comments[$key]->author_name = $author->name;
+            $comments[$key]->author_avatar = '';
+            $comments[$key]->published_at = Carbon::parse($comment->created_at)->diffForHumans();
+
+
+        }
+
+        return $comments;
     }
 
     /**
@@ -46,7 +57,7 @@ class CommentController extends Controller
         $comment = new Comment();
         $comment->user_id = Auth::guard('api')->user()->id;
         $comment->body = $request->comment;
-        $comment->commentable_type = $request->type == 'post' ? 'App\Post' : 'App\Answer';
+        $comment->commentable_type = $request->type;
         $comment->commentable_id = $request->postID;
 
         $comment->save();
@@ -54,6 +65,7 @@ class CommentController extends Controller
         $response = [
             'author_name' => Auth::guard('api')->user()->name,
             'author_avatar' => '',
+            'published_at' => Carbon::now()->diffForHumans(),
             'body' => $comment->body
         ];
 

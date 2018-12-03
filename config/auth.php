@@ -47,7 +47,12 @@ return [
         ],
 
         'api' => [
-            'driver' => 'token',
+            'driver' => 'passport',
+            'provider' => 'users',
+        ],
+
+        'rest-api' => [
+            'driver' => 'jwt',
             'provider' => 'users',
         ],
 

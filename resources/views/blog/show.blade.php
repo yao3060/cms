@@ -127,6 +127,7 @@
         </div>
         <div class="column">
 
+
             @for ($i = 1; $i <= 10; $i++)
             <div class="card m-b-20">
                 <header class="card-header">
@@ -149,10 +150,16 @@
 @section('scripts')
 <script>
 
+        @guest
+            var api_token = '';
+        @else
+            var api_token = '{{ Auth::user()->api_token }}';
+        @endguest
+
     var app = new Vue({
         el: '#app',
         data: {
-            api_token: '{{ Auth::user()->api_token }}'
+            api_token: api_token
         }
     });
 

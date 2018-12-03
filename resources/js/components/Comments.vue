@@ -1,6 +1,6 @@
 <template>
     <small>
-        <button class="button is-primary is-small" @click="isComponentModalActive = true">Comment</button>
+        <button class="button is-primary is-small" @click="cardModal()">Comment</button>
 
         <b-modal :active.sync="isComponentModalActive" has-modal-card>
             <form action="">
@@ -10,12 +10,24 @@
                     </header>
                     <section class="modal-card-body">
 
-                        <h4>Comments</h4>
                         <div v-if="comments.length > 0">
 
                             <div class="media" v-for="comment in comments">
-                                <h3>{{ comment.author_name}}</h3>
-                                {{ comment.body }}
+
+                                <figure class="media-left">
+                                    <p class="image is-64x64">
+                                        <img src="https://bulma.io/images/placeholders/128x128.png">
+                                    </p>
+                                </figure>
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p>
+                                            <strong>{{ comment.author_name}}</strong> <small>{{ comment.published_at}}</small>
+                                        </p>
+                                        {{ comment.body }}
+                                    </div>
+                                </div>
+
                             </div>
 
                         </div>
@@ -62,11 +74,30 @@
                 postId: this.postid
             }
         },
-        created:function () {
-            getComments();
-        },
+
         methods: {
+
+            cardModal: function(){
+                this.isComponentModalActive = true;
+                this.getComments();
+            },
+
             getComments: function(){
+
+                let _this = this;
+                axios.get('/api/comments',  {
+                    params: {
+                        type: _this.type,
+                        post_id: _this.postId
+                    }
+                }).then(function (response) {
+
+                    console.log(response)
+                    _this.comments = response.data
+
+                }).catch(function (error) {
+                    console.log(error);
+                });
 
             },
             saveComment: function(){

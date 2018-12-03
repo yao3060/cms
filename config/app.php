@@ -164,6 +164,7 @@ return [
          * Package Service Providers...
          */
         Overtrue\LaravelUEditor\UEditorServiceProvider::class,
+        Corcel\Laravel\CorcelServiceProvider::class,
 
         /*
          * Application Service Providers...

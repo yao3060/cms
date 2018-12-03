@@ -54797,6 +54797,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -54813,11 +54825,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
 
-    created: function created() {
-        getComments();
-    },
+
     methods: {
-        getComments: function getComments() {},
+
+        cardModal: function cardModal() {
+            this.isComponentModalActive = true;
+            this.getComments();
+        },
+
+        getComments: function getComments() {
+
+            var _this = this;
+            axios.get('/api/comments', {
+                params: {
+                    type: _this.type,
+                    post_id: _this.postId
+                }
+            }).then(function (response) {
+
+                console.log(response);
+                _this.comments = response.data;
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
         saveComment: function saveComment() {
 
             var _this = this;
@@ -54855,7 +54886,7 @@ var render = function() {
           staticClass: "button is-primary is-small",
           on: {
             click: function($event) {
-              _vm.isComponentModalActive = true
+              _vm.cardModal()
             }
           }
         },
@@ -54882,19 +54913,40 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("section", { staticClass: "modal-card-body" }, [
-                _c("h4", [_vm._v("Comments")]),
-                _vm._v(" "),
                 _vm.comments.length > 0
                   ? _c(
                       "div",
                       _vm._l(_vm.comments, function(comment) {
                         return _c("div", { staticClass: "media" }, [
-                          _c("h3", [_vm._v(_vm._s(comment.author_name))]),
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(comment.body) +
-                              "\n                        "
-                          )
+                          _c("figure", { staticClass: "media-left" }, [
+                            _c("p", { staticClass: "image is-64x64" }, [
+                              _c("img", {
+                                attrs: {
+                                  src:
+                                    "https://bulma.io/images/placeholders/128x128.png"
+                                }
+                              })
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "media-content" }, [
+                            _c("div", { staticClass: "content" }, [
+                              _c("p", [
+                                _c("strong", [
+                                  _vm._v(_vm._s(comment.author_name))
+                                ]),
+                                _vm._v(" "),
+                                _c("small", [
+                                  _vm._v(_vm._s(comment.published_at))
+                                ])
+                              ]),
+                              _vm._v(
+                                "\n                                    " +
+                                  _vm._s(comment.body) +
+                                  "\n                                "
+                              )
+                            ])
+                          ])
                         ])
                       })
                     )

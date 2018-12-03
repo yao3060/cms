@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Proxy\TokenProxy;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
+    public $proxy;
     /*
     |--------------------------------------------------------------------------
     | Login Controller
@@ -32,9 +35,23 @@ class LoginController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct( TokenProxy $proxy )
     {
-        $this->middleware('guest')->except(['logout', 'userLogout']);
+        $this->middleware('guest')
+            ->except(['logout', 'userLogout']);
+        $this->proxy = $proxy;
+    }
+
+
+    public function apiLogin()
+    {
+        //$this->validateLogin(request());
+        //dd(request());
+        return $this->proxy->login('password', [
+            'username' => request('email')?request('email'):request('username'),
+            'password' => request('password'),
+            'scope'    => ''
+        ]);
     }
 
 

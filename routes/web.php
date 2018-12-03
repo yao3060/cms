@@ -1,5 +1,7 @@
 <?php
 
+use App\User;
+use App\Http\Resources\User as UserResource;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,6 +22,7 @@ Auth::routes();
 Route::get('/mail-preview', function () {
     return new App\Mail\Contact();
 });
+Route::get('/email', 'HomeController@email')->name('sendEmail');
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/blog', 'BlogController@index')->name('blog.index');
@@ -57,4 +60,11 @@ Route::prefix('manage')
         Route::post('/upload/image', 'UploadController@image')->name('upload.image');
 
         Route::resource('/terms', 'TermController');
+});
+
+
+Route::get('/json', function (){
+
+
+    return new App\Http\Resources\User(User::find(1));
 });
